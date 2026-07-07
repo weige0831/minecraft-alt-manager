@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library'
+    id 'application'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    api 'com.google.code.gson:gson:2.10.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+tasks.register('verifyToken', JavaExec) {
+    group = 'verification'
+    description = 'Validates ALT_MANAGER_TOKEN against Minecraft Services using the production login path.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'dev.codex.altmanager.tools.TokenSmokeMain'
+}
+
+tasks.register('saveToken', JavaExec) {
+    group = 'verification'
+    description = 'Validates ALT_MANAGER_TOKEN and saves it to ALT_MANAGER_ACCOUNTS_PATH using the production login path.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'dev.codex.altmanager.tools.TokenSaveMain'
+}

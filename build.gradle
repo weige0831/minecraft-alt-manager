@@ -1,0 +1,14 @@
+plugins {
+    id 'fabric-loom' version '1.14.10' apply false
+}
+
+allprojects {
+    group = 'dev.codex'
+    version = '0.1.0-SNAPSHOT'
+}
+
+subprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+}

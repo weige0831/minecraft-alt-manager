@@ -1,0 +1,16 @@
+target/
+build/
+.gradle/
+out/
+*.iml
+.idea/
+.vscode/
+*.log
+accounts.json
+config/minecraft-alt-manager/
+crash-reports/
+logs/
+*.zip
+.env
+.env.*
+run/

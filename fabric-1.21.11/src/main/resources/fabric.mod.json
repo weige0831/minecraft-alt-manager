@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "altmanager",
+  "version": "${version}",
+  "name": "Minecraft Alt Manager",
+  "description": "A loader-scoped account manager front-end backed by the shared alt-manager core.",
+  "authors": [
+    "Codex"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.codex.altmanager.fabric.AltManagerFabricClient"
+    ]
+  },
+  "mixins": [
+    "altmanager.client.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21"
+  }
+}
