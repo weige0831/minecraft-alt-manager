@@ -58,7 +58,7 @@ config/minecraft-alt-manager/config.json
 
 ## Fabric 1.21.11 使用
 
-1. 把 `minecraft-alt-manager-fabric-1.21.11-0.1.0-SNAPSHOT.jar` 放进 `mods`。
+1. 把 `minecraft-alt-manager-fabric-1.21.11-0.1.0.jar` 放进 `mods`。
 2. 使用 Fabric Loader `0.18.1+` 启动 Minecraft `1.21.11`。
 3. 进入多人游戏界面，点击右上角 `Accounts`。
 4. 使用 `Microsoft` 或 `Import Token` 添加账号。
