@@ -1,0 +1,88 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+group = 'dev.codex'
+version = '0.1.2'
+
+def archives_base_name = 'minecraft-alt-manager'
+def moduleMinecraftVersion = '1.20.1'
+def moduleForgeVersion = '47.4.20'
+def moduleJavaVersion = 17
+
+base {
+    archivesName = "${archives_base_name}-forge-${moduleMinecraftVersion}"
+}
+
+minecraft {
+    mappings channel: 'official', version: moduleMinecraftVersion
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                altmanager {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${moduleMinecraftVersion}-${moduleForgeVersion}"
+    implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir '../core/src/main/java'
+        }
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = moduleJavaVersion
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'minecraft_version', moduleMinecraftVersion
+    inputs.property 'forge_version', moduleForgeVersion
+    inputs.property 'java_version', moduleJavaVersion
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand(
+                version: project.version,
+                minecraft_version: moduleMinecraftVersion,
+                forge_version: moduleForgeVersion,
+                java_version: moduleJavaVersion
+        )
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+                'Specification-Title'     : 'minecraft-alt-manager',
+                'Specification-Vendor'    : 'Codex',
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.version,
+                'Implementation-Vendor'   : 'Codex',
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    finalizedBy 'reobfJar'
+}

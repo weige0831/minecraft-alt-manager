@@ -13,7 +13,7 @@ public final class Json {
     }
 
     public static JsonObject parseObject(String body) {
-        JsonElement element = JsonParser.parseString(body == null || body.isEmpty() ? "{}" : body);
+        JsonElement element = new JsonParser().parse(body == null || body.isEmpty() ? "{}" : body);
         if (!element.isJsonObject()) {
             throw new IllegalArgumentException("Expected JSON object");
         }

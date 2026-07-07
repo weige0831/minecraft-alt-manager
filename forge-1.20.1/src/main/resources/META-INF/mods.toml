@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[${forge_version},)"
+license="MIT"
+
+[[mods]]
+modId="altmanager"
+version="${version}"
+displayName="Minecraft Alt Manager"
+authors="Codex"
+description='''
+Minecraft account manager with Microsoft device code login, access token import, and Session switching.
+'''
+
+[[dependencies.altmanager]]
+modId="forge"
+mandatory=true
+versionRange="[${forge_version},)"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.altmanager]]
+modId="minecraft"
+mandatory=true
+versionRange="[${minecraft_version},${minecraft_version}]"
+ordering="NONE"
+side="CLIENT"

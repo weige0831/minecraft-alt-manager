@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "altmanager",
+    "name": "Minecraft Alt Manager",
+    "description": "Minecraft account manager with Microsoft device code login, access token import, and Session switching.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Codex"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
