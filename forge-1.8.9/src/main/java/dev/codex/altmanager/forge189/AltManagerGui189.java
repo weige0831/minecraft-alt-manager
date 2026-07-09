@@ -47,12 +47,19 @@ public final class AltManagerGui189 extends GuiScreen {
     private boolean busy;
     private int contentX;
     private int contentTop;
+    private int contentBottom;
     private int contentW;
+    private int footerY;
+    private int bottom;
     private int listX;
     private int listY;
     private int listW;
     private int listBottom;
     private int rowH;
+    private int tokenY;
+    private int statusY;
+    private int actionY;
+    private int navY;
     private boolean compact;
 
     public AltManagerGui189(GuiScreen parent) {
@@ -74,14 +81,11 @@ public final class AltManagerGui189 extends GuiScreen {
         layout();
         this.buttonList.clear();
 
-        int footerY = this.height - 66;
-        tokenField = new GuiTextField(100, this.fontRendererObj, contentX, footerY + 6, contentW, 20);
+        tokenField = new GuiTextField(100, this.fontRendererObj, contentX, tokenY, contentW, 20);
         tokenField.setMaxStringLength(8192);
 
         MinecraftAccount selected = selectedAccount();
         int gap = 4;
-        int navY = this.height - 24;
-        int actionY = compact ? footerY + 32 : contentTop + 122;
         int detailX = contentX + listW + 10;
         int detailW = contentW - listW - 10;
 
@@ -119,9 +123,8 @@ public final class AltManagerGui189 extends GuiScreen {
         drawRect(0, 0, this.width, 26, 0xFF151A24);
         drawCenteredString(this.fontRendererObj, tr("altmanager.screen.title"), this.width / 2, 9, TEXT);
 
-        int footerY = this.height - 66;
-        panel(contentX, contentTop, contentW, Math.max(40, footerY - contentTop - 8));
-        panel(contentX, footerY, contentW, 42);
+        panel(contentX, contentTop, contentW, Math.max(40, contentBottom - contentTop));
+        panel(contentX, footerY, contentW, Math.max(42, bottom - footerY));
 
         drawString(this.fontRendererObj, tr("altmanager.section.saved_accounts"), listX + 8, contentTop + 8, TEXT);
         drawAccounts(mouseX, mouseY);
@@ -131,10 +134,10 @@ public final class AltManagerGui189 extends GuiScreen {
             drawCompactDetails(contentX + 8, contentTop + 30, contentW - 16);
         }
 
-        drawString(this.fontRendererObj, fit(status, contentW - 16), contentX + 8, footerY + 32, busy ? WARNING : (statusError ? DANGER : SUCCESS));
+        drawString(this.fontRendererObj, fit(status, contentW - 16), contentX + 8, statusY, busy ? WARNING : (statusError ? DANGER : SUCCESS));
         tokenField.drawTextBox();
         if (tokenField.getText().isEmpty() && !tokenField.isFocused()) {
-            drawString(this.fontRendererObj, tr("altmanager.placeholder.access_token"), contentX + 4, footerY + 12, MUTED);
+            drawString(this.fontRendererObj, tr("altmanager.placeholder.access_token"), contentX + 4, tokenY + 6, MUTED);
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -409,13 +412,21 @@ public final class AltManagerGui189 extends GuiScreen {
         int margin = this.width < 520 ? 8 : 14;
         compact = this.width < 760 || this.height < 430;
         contentTop = 34;
+        int footerH = compact ? 98 : 66;
+        bottom = Math.max(contentTop + 128, this.height - margin);
+        footerY = Math.max(contentTop + 96, bottom - footerH);
         contentW = Math.min(compact ? this.width - margin * 2 : 760, Math.max(1, this.width - margin * 2));
         contentX = (this.width - contentW) / 2;
+        contentBottom = Math.max(contentTop + 72, footerY - 8);
         rowH = 30;
         listX = contentX;
         listY = compact ? contentTop + 56 : contentTop + 28;
         listW = compact ? contentW : Math.min(300, Math.max(240, (contentW * 42) / 100));
-        listBottom = Math.max(listY + rowH, this.height - 74);
+        listBottom = Math.max(listY + rowH, contentBottom);
+        tokenY = compact ? footerY + 22 : footerY + 6;
+        statusY = compact ? footerY + 7 : footerY + 31;
+        actionY = compact ? footerY + 46 : Math.max(contentTop + 110, contentBottom - 58);
+        navY = compact ? footerY + 70 : bottom - 24;
     }
 
     private String fit(String value, int width) {
