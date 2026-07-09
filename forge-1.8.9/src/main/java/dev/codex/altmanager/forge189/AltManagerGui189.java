@@ -22,6 +22,7 @@ import java.util.List;
 public final class AltManagerGui189 extends GuiScreen {
     private static final int PANEL = 0xC8202430;
     private static final int PANEL_DARK = 0xDD11151F;
+    private static final int BORDER = 0xFF3B4254;
     private static final int ACCENT = 0xFF6AA9FF;
     private static final int SUCCESS = 0xFFA7E3A1;
     private static final int WARNING = 0xFFFFD27F;
@@ -56,6 +57,8 @@ public final class AltManagerGui189 extends GuiScreen {
     private int listY;
     private int listW;
     private int listBottom;
+    private int detailX;
+    private int detailW;
     private int rowH;
     private int tokenY;
     private int statusY;
@@ -87,15 +90,13 @@ public final class AltManagerGui189 extends GuiScreen {
 
         MinecraftAccount selected = selectedAccount();
         int gap = 4;
-        int detailX = contentX + listW + 10;
-        int detailW = contentW - listW - 10;
 
         if (compact) {
             int w = (contentW - gap * 3) / 4;
-            addButton(BTN_USE, contentX, footerY + 32, w, tr("altmanager.button.use_short"), selected != null && !busy);
-            addButton(BTN_REFRESH, contentX + (w + gap), footerY + 32, w, tr("altmanager.button.refresh_short"), selected != null && selected.getKind() == AccountKind.MICROSOFT && !busy);
-            addButton(BTN_DELETE, contentX + (w + gap) * 2, footerY + 32, w, tr("altmanager.button.delete"), selected != null && !busy);
-            addButton(BTN_RELOAD, contentX + (w + gap) * 3, footerY + 32, contentW - (w + gap) * 3, tr("altmanager.button.reload"), true);
+            addButton(BTN_USE, contentX, actionY, w, tr("altmanager.button.use_short"), selected != null && !busy);
+            addButton(BTN_REFRESH, contentX + (w + gap), actionY, w, tr("altmanager.button.refresh_short"), selected != null && selected.getKind() == AccountKind.MICROSOFT && !busy);
+            addButton(BTN_DELETE, contentX + (w + gap) * 2, actionY, w, tr("altmanager.button.delete"), selected != null && !busy);
+            addButton(BTN_RELOAD, contentX + (w + gap) * 3, actionY, contentW - (w + gap) * 3, tr("altmanager.button.reload"), true);
             int bottomW = (contentW - gap * 2) / 3;
             addButton(BTN_BACK, contentX, navY, bottomW, tr("altmanager.button.back"), true);
             addButton(BTN_MICROSOFT, contentX + bottomW + gap, navY, bottomW, tr("altmanager.button.microsoft_short"), !busy);
@@ -127,15 +128,21 @@ public final class AltManagerGui189 extends GuiScreen {
         drawRect(0, 0, this.width, 26, 0xFF151A24);
         drawCenteredString(this.fontRendererObj, tr("altmanager.screen.title"), this.width / 2, 9, TEXT);
 
-        panel(contentX, contentTop, contentW, Math.max(40, contentBottom - contentTop));
-        panel(contentX, footerY, contentW, Math.max(42, bottom - footerY));
-
-        drawString(this.fontRendererObj, tr("altmanager.section.saved_accounts"), listX + 8, contentTop + 8, TEXT);
-        drawAccounts(mouseX, mouseY);
-        if (!compact) {
-            drawDetails(contentX + listW + 10, contentTop + 8, contentW - listW - 18);
+        if (compact) {
+            panel(contentX, contentTop, contentW, Math.max(40, contentBottom - contentTop));
+            panel(contentX, footerY, contentW, Math.max(42, bottom - footerY));
+            drawString(this.fontRendererObj, tr("altmanager.section.saved_accounts"), contentX + 10, contentTop + 8, TEXT);
+            drawRightAligned(tr("altmanager.label.total", accounts.size()), contentX + contentW - 10, contentTop + 8, MUTED);
+            drawCompactDetails(contentX + 10, contentTop + 28, contentW - 20);
+            drawAccounts(mouseX, mouseY);
         } else {
-            drawCompactDetails(contentX + 8, contentTop + 30, contentW - 16);
+            panel(listX, contentTop, listW, Math.max(40, contentBottom - contentTop));
+            panel(detailX, contentTop, detailW, Math.max(40, contentBottom - contentTop));
+            panel(contentX, footerY, contentW, Math.max(42, bottom - footerY));
+            drawString(this.fontRendererObj, tr("altmanager.section.saved_accounts"), listX + 10, contentTop + 9, TEXT);
+            drawRightAligned(tr("altmanager.label.total", accounts.size()), listX + listW - 10, contentTop + 9, MUTED);
+            drawAccounts(mouseX, mouseY);
+            drawDetails(detailX, contentTop, detailW);
         }
 
         drawString(this.fontRendererObj, fit(status, contentW - 16), contentX + 8, statusY, busy ? WARNING : (statusError ? DANGER : SUCCESS));
@@ -148,42 +155,49 @@ public final class AltManagerGui189 extends GuiScreen {
 
     private void drawAccounts(int mouseX, int mouseY) {
         if (accounts.isEmpty()) {
-            drawString(this.fontRendererObj, tr("altmanager.empty.no_accounts"), listX + 8, listY + 10, MUTED);
+            drawString(this.fontRendererObj, tr("altmanager.empty.no_accounts"), listX + 10, listY + 12, MUTED);
             return;
         }
         int y = listY;
         String currentName = currentUsername();
         for (MinecraftAccount account : accounts) {
-            if (y + rowH > listBottom) {
-                drawString(this.fontRendererObj, "...", listX + 10, y + 8, MUTED);
+            if (y + rowH > listBottom - 6) {
+                drawString(this.fontRendererObj, "...", listX + 12, y + 10, MUTED);
                 break;
             }
             boolean selected = account.getUuid().equals(selectedUuid);
             boolean current = account.getUsername().equals(currentName);
-            boolean hover = mouseX >= listX + 4 && mouseX <= listX + listW - 4 && mouseY >= y && mouseY <= y + rowH - 3;
-            drawRect(listX + 4, y, listX + listW - 4, y + rowH - 3, selected ? 0xFF243B5C : (hover ? 0xFF202838 : PANEL_DARK));
+            boolean hover = mouseX >= listX + 6 && mouseX <= listX + listW - 6 && mouseY >= y && mouseY <= y + rowH - 3;
+            drawRect(listX + 6, y, listX + listW - 6, y + rowH - 3, selected ? 0xFF243B5C : (hover ? 0xFF202838 : PANEL_DARK));
             if (selected) {
-                drawRect(listX + 4, y, listX + 7, y + rowH - 3, ACCENT);
+                drawRect(listX + 6, y, listX + 9, y + rowH - 3, ACCENT);
             }
-            drawString(this.fontRendererObj, fit(account.getUsername(), listW - 30), listX + 12, y + 5, TEXT);
-            drawString(this.fontRendererObj, current ? tr("altmanager.badge.current") : account.getKind().name(), listX + 12, y + 17, current ? SUCCESS : MUTED);
+            drawString(this.fontRendererObj, fit(account.getUsername(), listW - 84), listX + 15, y + 5, TEXT);
+            drawString(this.fontRendererObj, current ? tr("altmanager.badge.current") : account.getKind().name(), listX + 15, y + 18, current ? SUCCESS : MUTED);
             y += rowH;
         }
     }
 
-    private void drawDetails(int x, int y, int width) {
+    private void drawDetails(int x, int top, int width) {
         MinecraftAccount account = selectedAccount();
-        drawString(this.fontRendererObj, tr("altmanager.section.selected_account"), x, y, TEXT);
+        drawString(this.fontRendererObj, tr("altmanager.section.selected_account"), x + 10, top + 9, TEXT);
         if (account == null) {
-            drawString(this.fontRendererObj, tr("altmanager.empty.select_account"), x, y + 28, MUTED);
-            drawString(this.fontRendererObj, tr("altmanager.empty.add_account"), x, y + 42, MUTED);
+            drawString(this.fontRendererObj, tr("altmanager.empty.select_account"), x + 10, top + 38, MUTED);
+            drawString(this.fontRendererObj, tr("altmanager.empty.add_account"), x + 10, top + 52, MUTED);
             return;
         }
-        drawString(this.fontRendererObj, fit(account.getUsername(), width), x, y + 28, TEXT);
-        drawString(this.fontRendererObj, fit(account.getUuid(), width), x, y + 42, MUTED);
-        drawString(this.fontRendererObj, fit(account.getKind().name() + " | " + tr("altmanager.label.expires") + ": " + expiryText(account), width), x, y + 56, MUTED);
+        int y = top + 38;
+        drawField(x + 10, y, tr("altmanager.label.name"), account.getUsername(), width - 20);
+        y += 28;
+        drawField(x + 10, y, tr("altmanager.label.uuid"), account.getUuid(), width - 20);
+        y += 28;
+        drawField(x + 10, y, tr("altmanager.label.source"), account.getKind().name(), width - 20);
+        y += 28;
+        drawField(x + 10, y, tr("altmanager.label.expires"), expiryText(account), width - 20);
+        y += 34;
         boolean current = account.getUsername().equals(currentUsername());
-        drawString(this.fontRendererObj, tr(current ? "altmanager.status.active_session" : "altmanager.status.ready_to_use"), x, y + 78, current ? SUCCESS : MUTED);
+        drawString(this.fontRendererObj, fit(tr(current ? "altmanager.status.active_session" : "altmanager.status.ready_to_use"), width - 20), x + 10, y, current ? SUCCESS : MUTED);
+        drawString(this.fontRendererObj, fit(tr("altmanager.label.action_hint"), width - 20), x + 10, actionY - 16, MUTED);
     }
 
     private void drawCompactDetails(int x, int y, int width) {
@@ -196,16 +210,25 @@ public final class AltManagerGui189 extends GuiScreen {
         drawString(this.fontRendererObj, fit(account.getKind().name() + " | " + expiryText(account), width), x, y + 12, MUTED);
     }
 
+    private void drawField(int x, int y, String label, String value, int width) {
+        drawString(this.fontRendererObj, label, x, y, MUTED);
+        drawString(this.fontRendererObj, fit(value == null ? "-" : value, width), x, y + 11, TEXT);
+    }
+
+    private void drawRightAligned(String text, int right, int y, int color) {
+        drawString(this.fontRendererObj, text, right - this.fontRendererObj.getStringWidth(text), y, color);
+    }
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         tokenField.mouseClicked(mouseX, mouseY, mouseButton);
         if (mouseButton == 0) {
             int y = listY;
             for (MinecraftAccount account : accounts) {
-                if (y + rowH > listBottom) {
+                if (y + rowH > listBottom - 6) {
                     break;
                 }
-                if (mouseX >= listX + 4 && mouseX <= listX + listW - 4 && mouseY >= y && mouseY <= y + rowH - 3) {
+                if (mouseX >= listX + 6 && mouseX <= listX + listW - 6 && mouseY >= y && mouseY <= y + rowH - 3) {
                     selectedUuid = account.getUuid();
                     refreshScreen(tr("altmanager.status.ready"), false, selectedUuid);
                     return;
@@ -414,23 +437,39 @@ public final class AltManagerGui189 extends GuiScreen {
 
     private void layout() {
         int margin = this.width < 520 ? 8 : 14;
-        compact = this.width < 760 || this.height < 430;
-        contentTop = 34;
-        int footerH = compact ? 98 : 66;
+        compact = this.width < 900 || this.height < 560;
+        contentTop = this.height < 420 ? 30 : 34;
         bottom = Math.max(contentTop + 128, this.height - margin);
-        footerY = Math.max(contentTop + 96, bottom - footerH);
+        int availableH = Math.max(120, bottom - contentTop);
+        int footerH = compact ? clamp(availableH / 3, 90, 106) : 66;
+        footerY = bottom - footerH;
         contentW = Math.min(compact ? this.width - margin * 2 : 760, Math.max(1, this.width - margin * 2));
         contentX = (this.width - contentW) / 2;
         contentBottom = Math.max(contentTop + 72, footerY - 8);
-        rowH = 30;
-        listX = contentX;
-        listY = compact ? contentTop + 56 : contentTop + 28;
-        listW = compact ? contentW : Math.min(300, Math.max(240, (contentW * 42) / 100));
-        listBottom = Math.max(listY + rowH, contentBottom);
+        if (contentBottom > footerY - 4) {
+            contentBottom = footerY - 4;
+        }
         tokenY = compact ? footerY + 22 : footerY + 6;
         statusY = compact ? footerY + 7 : footerY + 31;
         actionY = compact ? footerY + 46 : Math.max(contentTop + 110, contentBottom - 58);
         navY = compact ? footerY + 70 : bottom - 24;
+        if (compact) {
+            rowH = 30;
+            listX = contentX;
+            listY = contentTop + 56;
+            listW = contentW;
+            listBottom = Math.max(listY + rowH, contentBottom);
+            detailX = contentX;
+            detailW = contentW;
+        } else {
+            rowH = 32;
+            listX = contentX;
+            listY = contentTop + 28;
+            listW = clamp((contentW * 42) / 100, 280, 320);
+            listBottom = Math.max(listY + rowH, contentBottom);
+            detailX = contentX + listW + 10;
+            detailW = contentW - listW - 10;
+        }
     }
 
     private String fit(String value, int width) {
@@ -454,10 +493,14 @@ public final class AltManagerGui189 extends GuiScreen {
 
     private void panel(int x, int y, int width, int height) {
         drawRect(x, y, x + width, y + height, PANEL);
-        drawRect(x, y, x + width, y + 1, 0xFF3B4254);
-        drawRect(x, y + height - 1, x + width, y + height, 0xFF3B4254);
-        drawRect(x, y, x + 1, y + height, 0xFF3B4254);
-        drawRect(x + width - 1, y, x + width, y + height, 0xFF3B4254);
+        drawRect(x, y, x + width, y + 1, BORDER);
+        drawRect(x, y + height - 1, x + width, y + height, BORDER);
+        drawRect(x, y, x + 1, y + height, BORDER);
+        drawRect(x + width - 1, y, x + width, y + height, BORDER);
+    }
+
+    private static int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
     }
 
     private static void openUri(String uri) {

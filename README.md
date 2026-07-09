@@ -6,16 +6,16 @@ English documentation is available below.
 
 ## 当前发布状态
 
-`v0.1.5` 已验证构建以下可安装版本：
+`v0.1.6` 已验证构建以下可安装版本：
 
 | Loader | Minecraft | Java | 构建模块 | 发布资产 |
 | --- | --- | --- | --- | --- |
-| Fabric | 1.20.1 | 17+ | `fabric-1.20.1` | `minecraft-alt-manager-fabric-1.20.1-0.1.5.jar` |
-| Fabric | 1.20.6 | 21+ | `fabric-1.20.6` | `minecraft-alt-manager-fabric-1.20.6-0.1.5.jar` |
-| Fabric | 1.21.11 | 21+ | `fabric-1.21.11` | `minecraft-alt-manager-fabric-1.21.11-0.1.5.jar` |
-| Forge | 1.20.1 | 17+ | `forge-1.20.1` | `minecraft-alt-manager-forge-1.20.1-0.1.5.jar` |
-| Forge | 1.12.2 | 8 | `forge-1.12.2` | `minecraft-alt-manager-forge-1.12.2-0.1.5.jar` |
-| Forge | 1.8.9 | 8 | `forge-1.8.9` | `minecraft-alt-manager-forge-1.8.9-0.1.5.jar` |
+| Fabric | 1.20.1 | 17+ | `fabric-1.20.1` | `minecraft-alt-manager-fabric-1.20.1-0.1.6.jar` |
+| Fabric | 1.20.6 | 21+ | `fabric-1.20.6` | `minecraft-alt-manager-fabric-1.20.6-0.1.6.jar` |
+| Fabric | 1.21.11 | 21+ | `fabric-1.21.11` | `minecraft-alt-manager-fabric-1.21.11-0.1.6.jar` |
+| Forge | 1.20.1 | 17+ | `forge-1.20.1` | `minecraft-alt-manager-forge-1.20.1-0.1.6.jar` |
+| Forge | 1.12.2 | 8 | `forge-1.12.2` | `minecraft-alt-manager-forge-1.12.2-0.1.6.jar` |
+| Forge | 1.8.9 | 8 | `forge-1.8.9` | `minecraft-alt-manager-forge-1.8.9-0.1.6.jar` |
 
 项目采用“多版本多 jar”交付方式，不承诺一个 jar 同时覆盖所有 Minecraft / Fabric / Forge 版本。
 
@@ -96,16 +96,16 @@ Minecraft Alt Manager is released as separate mod jars per Minecraft / loader ve
 
 ## Release Status
 
-`v0.1.5` has verified installable builds for:
+`v0.1.6` has verified installable builds for:
 
 | Loader | Minecraft | Java | Module | Release Asset |
 | --- | --- | --- | --- | --- |
-| Fabric | 1.20.1 | 17+ | `fabric-1.20.1` | `minecraft-alt-manager-fabric-1.20.1-0.1.5.jar` |
-| Fabric | 1.20.6 | 21+ | `fabric-1.20.6` | `minecraft-alt-manager-fabric-1.20.6-0.1.5.jar` |
-| Fabric | 1.21.11 | 21+ | `fabric-1.21.11` | `minecraft-alt-manager-fabric-1.21.11-0.1.5.jar` |
-| Forge | 1.20.1 | 17+ | `forge-1.20.1` | `minecraft-alt-manager-forge-1.20.1-0.1.5.jar` |
-| Forge | 1.12.2 | 8 | `forge-1.12.2` | `minecraft-alt-manager-forge-1.12.2-0.1.5.jar` |
-| Forge | 1.8.9 | 8 | `forge-1.8.9` | `minecraft-alt-manager-forge-1.8.9-0.1.5.jar` |
+| Fabric | 1.20.1 | 17+ | `fabric-1.20.1` | `minecraft-alt-manager-fabric-1.20.1-0.1.6.jar` |
+| Fabric | 1.20.6 | 21+ | `fabric-1.20.6` | `minecraft-alt-manager-fabric-1.20.6-0.1.6.jar` |
+| Fabric | 1.21.11 | 21+ | `fabric-1.21.11` | `minecraft-alt-manager-fabric-1.21.11-0.1.6.jar` |
+| Forge | 1.20.1 | 17+ | `forge-1.20.1` | `minecraft-alt-manager-forge-1.20.1-0.1.6.jar` |
+| Forge | 1.12.2 | 8 | `forge-1.12.2` | `minecraft-alt-manager-forge-1.12.2-0.1.6.jar` |
+| Forge | 1.8.9 | 8 | `forge-1.8.9` | `minecraft-alt-manager-forge-1.8.9-0.1.6.jar` |
 
 The project ships multiple jars for different version ranges. It does not promise one universal jar for every Minecraft / Fabric / Forge version.
 
