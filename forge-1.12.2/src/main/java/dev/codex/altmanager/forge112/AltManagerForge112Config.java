@@ -11,9 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class AltManagerForge112Config {
+    private static final String DEFAULT_MICROSOFT_CLIENT_ID = "e3c9f9be-7cde-49c9-887a-20cc3f3fa10c";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private String microsoftClientId = "";
+    private String microsoftClientId = DEFAULT_MICROSOFT_CLIENT_ID;
 
     public static AltManagerForge112Config load(Path path) {
         try {
@@ -36,7 +37,8 @@ public final class AltManagerForge112Config {
     }
 
     public String getMicrosoftClientId() {
-        return microsoftClientId == null ? "" : microsoftClientId.trim();
+        String configured = microsoftClientId == null ? "" : microsoftClientId.trim();
+        return configured.isEmpty() ? DEFAULT_MICROSOFT_CLIENT_ID : configured;
     }
 
     public boolean hasMicrosoftClientId() {

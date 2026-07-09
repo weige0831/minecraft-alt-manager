@@ -1,4 +1,4 @@
-# Minecraft Alt Manager
+﻿# Minecraft Alt Manager
 
 一个按 Minecraft / Loader 版本分包发布的账号管理器。核心登录、账号存储和 Session 切换逻辑在 `core` 中复用；每个可安装 mod jar 由对应版本模块独立构建。
 
@@ -6,16 +6,16 @@ English documentation is available below.
 
 ## 当前发布状态
 
-`v0.1.2` 已验证构建以下可安装版本：
+`v0.1.3` 已验证构建以下可安装版本：
 
 | Loader | Minecraft | Java | 构建模块 | 发布资产 |
 | --- | --- | --- | --- | --- |
-| Fabric | 1.20.1 | 17+ | `fabric-1.20.1` | `minecraft-alt-manager-fabric-1.20.1-0.1.2.jar` |
-| Fabric | 1.20.6 | 21+ | `fabric-1.20.6` | `minecraft-alt-manager-fabric-1.20.6-0.1.2.jar` |
-| Fabric | 1.21.11 | 21+ | `fabric-1.21.11` | `minecraft-alt-manager-fabric-1.21.11-0.1.2.jar` |
-| Forge | 1.20.1 | 17+ | `forge-1.20.1` | `minecraft-alt-manager-forge-1.20.1-0.1.2.jar` |
-| Forge | 1.12.2 | 8 | `forge-1.12.2` | `minecraft-alt-manager-forge-1.12.2-0.1.2.jar` |
-| Forge | 1.8.9 | 8 | `forge-1.8.9` | `minecraft-alt-manager-forge-1.8.9-0.1.2.jar` |
+| Fabric | 1.20.1 | 17+ | `fabric-1.20.1` | `minecraft-alt-manager-fabric-1.20.1-0.1.3.jar` |
+| Fabric | 1.20.6 | 21+ | `fabric-1.20.6` | `minecraft-alt-manager-fabric-1.20.6-0.1.3.jar` |
+| Fabric | 1.21.11 | 21+ | `fabric-1.21.11` | `minecraft-alt-manager-fabric-1.21.11-0.1.3.jar` |
+| Forge | 1.20.1 | 17+ | `forge-1.20.1` | `minecraft-alt-manager-forge-1.20.1-0.1.3.jar` |
+| Forge | 1.12.2 | 8 | `forge-1.12.2` | `minecraft-alt-manager-forge-1.12.2-0.1.3.jar` |
+| Forge | 1.8.9 | 8 | `forge-1.8.9` | `minecraft-alt-manager-forge-1.8.9-0.1.3.jar` |
 
 项目采用“多版本多 jar”交付方式，不承诺一个 jar 同时覆盖所有 Minecraft / Fabric / Forge 版本。
 
@@ -67,15 +67,15 @@ cd ..\forge-1.8.9
 config/minecraft-alt-manager/config.json
 ```
 
-填入你自己的 Microsoft Entra / Azure 公开客户端 ID：
+mod 已内置默认 Microsoft public client id：
 
 ```json
 {
-  "microsoftClientId": "your-public-client-id"
+  "microsoftClientId": "e3c9f9be-7cde-49c9-887a-20cc3f3fa10c"
 }
 ```
 
-不要把 `client_secret` 放进客户端 mod。没有配置 `microsoftClientId` 时，access token 导入、账号列表、删除和切换仍可用，Microsoft 登录按钮会提示先配置。
+如果你想使用自己的 Microsoft Entra / Azure 应用，可以在这里改成你自己的公开客户端 ID。不要把 `client_secret` 放进客户端 mod。
 
 ## Access Token 验证
 
@@ -94,16 +94,16 @@ Minecraft Alt Manager is released as separate mod jars per Minecraft / loader ve
 
 ## Release Status
 
-`v0.1.2` has verified installable builds for:
+`v0.1.3` has verified installable builds for:
 
 | Loader | Minecraft | Java | Module | Release Asset |
 | --- | --- | --- | --- | --- |
-| Fabric | 1.20.1 | 17+ | `fabric-1.20.1` | `minecraft-alt-manager-fabric-1.20.1-0.1.2.jar` |
-| Fabric | 1.20.6 | 21+ | `fabric-1.20.6` | `minecraft-alt-manager-fabric-1.20.6-0.1.2.jar` |
-| Fabric | 1.21.11 | 21+ | `fabric-1.21.11` | `minecraft-alt-manager-fabric-1.21.11-0.1.2.jar` |
-| Forge | 1.20.1 | 17+ | `forge-1.20.1` | `minecraft-alt-manager-forge-1.20.1-0.1.2.jar` |
-| Forge | 1.12.2 | 8 | `forge-1.12.2` | `minecraft-alt-manager-forge-1.12.2-0.1.2.jar` |
-| Forge | 1.8.9 | 8 | `forge-1.8.9` | `minecraft-alt-manager-forge-1.8.9-0.1.2.jar` |
+| Fabric | 1.20.1 | 17+ | `fabric-1.20.1` | `minecraft-alt-manager-fabric-1.20.1-0.1.3.jar` |
+| Fabric | 1.20.6 | 21+ | `fabric-1.20.6` | `minecraft-alt-manager-fabric-1.20.6-0.1.3.jar` |
+| Fabric | 1.21.11 | 21+ | `fabric-1.21.11` | `minecraft-alt-manager-fabric-1.21.11-0.1.3.jar` |
+| Forge | 1.20.1 | 17+ | `forge-1.20.1` | `minecraft-alt-manager-forge-1.20.1-0.1.3.jar` |
+| Forge | 1.12.2 | 8 | `forge-1.12.2` | `minecraft-alt-manager-forge-1.12.2-0.1.3.jar` |
+| Forge | 1.8.9 | 8 | `forge-1.8.9` | `minecraft-alt-manager-forge-1.8.9-0.1.3.jar` |
 
 The project ships multiple jars for different version ranges. It does not promise one universal jar for every Minecraft / Fabric / Forge version.
 
@@ -147,8 +147,21 @@ Artifacts are written to each module's `build/libs/` directory. Legacy Forge tar
 3. Start the game with the matching Minecraft, Fabric Loader, or Forge version.
 4. Open Multiplayer and click `Accounts`.
 
+## Microsoft Client ID
+
+The mod ships with a default Microsoft public client id:
+
+```json
+{
+  "microsoftClientId": "e3c9f9be-7cde-49c9-887a-20cc3f3fa10c"
+}
+```
+
+You can still override it in `config/minecraft-alt-manager/config.json` with your own Microsoft Entra / Azure public client id. Do not put a `client_secret` in a client-side mod.
+
 ## References
 
 - Microsoft device code flow: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-device-code
 - Xbox Live / XSTS authentication: https://learn.microsoft.com/en-us/gaming/gdk/docs/services/fundamentals/s2s-auth-calls/service-authentication/live-website-authentication
 - Fabric Meta: https://meta.fabricmc.net/
+
