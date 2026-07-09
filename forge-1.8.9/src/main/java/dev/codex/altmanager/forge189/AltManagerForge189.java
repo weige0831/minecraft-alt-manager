@@ -23,7 +23,7 @@ import java.nio.file.Path;
 )
 public final class AltManagerForge189 {
     public static final String MOD_ID = "altmanager";
-    public static final String VERSION = "0.1.4";
+    public static final String VERSION = "0.1.5";
     private static final int ACCOUNTS_BUTTON_ID = 89189;
 
     private static AltManagerForge189Config config;

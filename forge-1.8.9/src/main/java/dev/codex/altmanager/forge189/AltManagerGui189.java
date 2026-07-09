@@ -28,6 +28,7 @@ public final class AltManagerGui189 extends GuiScreen {
     private static final int TEXT = 0xFFE8EDF7;
     private static final int MUTED = 0xFF9AA6BA;
     private static final int DANGER = 0xFFFF8E8E;
+    private static final int MAX_BUTTON_WIDTH = 200;
 
     private static final int BTN_USE = 1;
     private static final int BTN_REFRESH = 2;
@@ -102,9 +103,12 @@ public final class AltManagerGui189 extends GuiScreen {
             return;
         }
 
-        addButton(BTN_USE, detailX, actionY, detailW, tr("altmanager.button.use_selected"), selected != null && !busy);
-        addButton(BTN_REFRESH, detailX, actionY + 24, (detailW - 6) / 2, tr("altmanager.button.refresh"), selected != null && selected.getKind() == AccountKind.MICROSOFT && !busy);
-        addButton(BTN_DELETE, detailX + (detailW + 6) / 2, actionY + 24, (detailW - 6) / 2, tr("altmanager.button.delete"), selected != null && !busy);
+        int actionW = Math.min(MAX_BUTTON_WIDTH, detailW);
+        int actionX = detailX + Math.max(0, (detailW - actionW) / 2);
+        int halfW = (actionW - gap) / 2;
+        addButton(BTN_USE, actionX, actionY, actionW, tr("altmanager.button.use_selected"), selected != null && !busy);
+        addButton(BTN_REFRESH, actionX, actionY + 24, halfW, tr("altmanager.button.refresh"), selected != null && selected.getKind() == AccountKind.MICROSOFT && !busy);
+        addButton(BTN_DELETE, actionX + halfW + gap, actionY + 24, actionW - halfW - gap, tr("altmanager.button.delete"), selected != null && !busy);
         addButton(BTN_BACK, contentX, navY, 116, tr("altmanager.button.back"), true);
         addButton(BTN_RELOAD, contentX + 122, navY, 104, tr("altmanager.button.reload"), true);
         addButton(BTN_MICROSOFT, contentX + contentW - 268, navY, 126, tr("altmanager.button.microsoft"), !busy);
@@ -112,7 +116,7 @@ public final class AltManagerGui189 extends GuiScreen {
     }
 
     private void addButton(int id, int x, int y, int width, String label, boolean enabled) {
-        GuiButton button = new GuiButton(id, x, y, Math.max(36, width), 20, label);
+        GuiButton button = new GuiButton(id, x, y, Math.min(MAX_BUTTON_WIDTH, Math.max(36, width)), 20, label);
         button.enabled = enabled;
         this.buttonList.add(button);
     }

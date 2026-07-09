@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'dev.codex'
-version = '0.1.4'
+version = '0.1.5'
 
 def archives_base_name = 'minecraft-alt-manager'
 def moduleMinecraftVersion = '1.20.1'
