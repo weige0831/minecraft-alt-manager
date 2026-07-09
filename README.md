@@ -77,6 +77,8 @@ mod 已内置默认 Microsoft public client id：
 
 如果你想使用自己的 Microsoft Entra / Azure 应用，可以在这里改成你自己的公开客户端 ID。不要把 `client_secret` 放进客户端 mod。
 
+如果 Microsoft 登录显示 `HTTP 401` 或 `AADSTS70002`，说明该应用没有开启 device code/public client 能力。请在 Azure App Registration 中添加 `Mobile and desktop applications` 平台，并启用 `Allow public client flows`，然后重新尝试。
+
 ## Access Token 验证
 
 进游戏前可以先用 core 验证 token：
@@ -158,6 +160,8 @@ The mod ships with a default Microsoft public client id:
 ```
 
 You can still override it in `config/minecraft-alt-manager/config.json` with your own Microsoft Entra / Azure public client id. Do not put a `client_secret` in a client-side mod.
+
+If Microsoft login reports `HTTP 401` or `AADSTS70002`, the application is not enabled for device code/public client flow. In Azure App Registration, add a `Mobile and desktop applications` platform and enable `Allow public client flows`, then try again.
 
 ## References
 

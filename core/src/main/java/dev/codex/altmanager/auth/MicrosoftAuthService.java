@@ -140,7 +140,10 @@ public final class MicrosoftAuthService {
                 return parseMicrosoftTokenResponse(response, "Microsoft token request failed");
             }
 
-            JsonObject json = parseObject(response, "Microsoft token request failed");
+            JsonObject json = tryParseObject(response.getBody());
+            if (json == null) {
+                throw new LoginException(describeHttpFailure("Microsoft token request failed", response, null));
+            }
             String error = Json.string(json, "error");
             if ("authorization_pending".equals(error)) {
                 sleep(intervalSeconds);
@@ -157,10 +160,7 @@ public final class MicrosoftAuthService {
             if ("expired_token".equals(error)) {
                 throw new LoginException("Microsoft device code expired");
             }
-            String description = Json.string(json, "error_description");
-            throw new LoginException("Microsoft token request failed: HTTP " + response.getStatusCode()
-                    + (error == null ? "" : " (" + error + ")")
-                    + (description == null ? "" : " " + description));
+            throw new LoginException(describeHttpFailure("Microsoft token request failed", response, json));
         }
     }
 
@@ -264,15 +264,10 @@ public final class MicrosoftAuthService {
     }
 
     private JsonObject parseSuccessful(HttpResponse response, String message) throws LoginException {
-        JsonObject json = parseObject(response, message);
         if (!response.isSuccessful()) {
-            String error = Json.string(json, "error");
-            String description = Json.string(json, "error_description");
-            throw new LoginException(message + ": HTTP " + response.getStatusCode()
-                    + (error == null ? "" : " (" + error + ")")
-                    + (description == null ? "" : " " + description));
+            throw new LoginException(describeHttpFailure(message, response, tryParseObject(response.getBody())));
         }
-        return json;
+        return parseObject(response, message);
     }
 
     private JsonObject parseObject(HttpResponse response, String message) throws LoginException {
@@ -281,6 +276,48 @@ public final class MicrosoftAuthService {
         } catch (RuntimeException exception) {
             throw new LoginException(message + ": invalid JSON response, HTTP " + response.getStatusCode(), exception);
         }
+    }
+
+    private JsonObject tryParseObject(String body) {
+        if (body == null || body.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return Json.parseObject(body);
+        } catch (RuntimeException ignored) {
+            return null;
+        }
+    }
+
+    private String describeHttpFailure(String message, HttpResponse response, JsonObject json) {
+        StringBuilder builder = new StringBuilder(message)
+                .append(": HTTP ")
+                .append(response.getStatusCode());
+        String error = json == null ? null : Json.string(json, "error");
+        String description = json == null ? null : Json.string(json, "error_description");
+        if (error != null && !error.trim().isEmpty()) {
+            builder.append(" (").append(error).append(')');
+        }
+        if (description != null && !description.trim().isEmpty()) {
+            builder.append(' ').append(description);
+        }
+        if (isDeviceCodeClientConfigurationFailure(message, response.getStatusCode(), description)) {
+            builder.append(" Hint: this Microsoft client id is not enabled for device code/public client flow. ")
+                    .append("In Azure App Registration, add a Mobile and desktop platform and enable ")
+                    .append("'Allow public client flows', or configure another public client id.");
+        }
+        return builder.toString();
+    }
+
+    private boolean isDeviceCodeClientConfigurationFailure(String message, int statusCode, String description) {
+        if (message == null || !message.contains("device code request")) {
+            return false;
+        }
+        if (description != null && (description.contains("AADSTS70002")
+                || description.contains("must be marked as 'mobile'"))) {
+            return true;
+        }
+        return statusCode == 401;
     }
 
     private String required(JsonObject json, String key, String message) throws LoginException {
